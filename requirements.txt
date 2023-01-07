@@ -1,4 +1,5 @@
 flask
+imagezmq
 imutils
 numpy
 opencv-python

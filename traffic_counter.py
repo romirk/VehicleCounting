@@ -4,6 +4,7 @@ Traffic Counting
 import os
 
 import cv2
+import imagezmq
 import imutils
 import numpy as np
 import pyrealsense2 as rs
@@ -25,7 +26,7 @@ class TrafficCounter(object):
             num_contours=10,
             out_video_params=None,
             starting_frame=10,
-    ):
+            img_server=None):
         if out_video_params is None:
             out_video_params = {}
         self.crop_rect = []  # stores the click coordinates where to crop the frame
@@ -56,12 +57,15 @@ class TrafficCounter(object):
             []
         )  # this will contain the coordinates of the centers in the previous
 
-        # --Getting frame dimensions
+        self.server = img_server
+        self.sender = imagezmq.ImageSender(connect_to=self.server)
+
+        # Getting frame dimensions
         self._compute_frame_dimensions()
         self._set_up_line(line_direction, line_position)
         self.collage_frame = self._create_collage_frame()
 
-        # ---Setting up video writers for output
+        # Setting up video writers for output
         self.out_video_params = out_video_params
         if len(video_out) < 1:
             self.video_out = False

@@ -92,6 +92,9 @@ def CLI():
         help=f"Select the starting frame for video analysis (default is {starting_frame_default}). All frames before "
              f"that will still be used for the background average",
     )
+    parser.add_argument(
+        "--server", default="tcp://localhost:5555", help="img server address"
+    )
     return parser.parse_args()
 
 
